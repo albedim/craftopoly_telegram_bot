@@ -5,12 +5,12 @@ def start_message(username):
     return "Hey {username}!" \
         "\nBenvenuto nel bot ufficiale di Craftopoly.\n" \
         "Qui puoi gestire i tuoi ticket senza per forza entrare on game" \
-        "\n\n/connect - Connetti il tuo Craftopoly ID.".replace("{username}", username)
+        "\n\nConnetti il tuo Craftopoly ID:\n/connect - <codice>".replace("{username}", username)
 
 
 def connect_message_success(username):
-    return "✅ Hai connesso con successo il tuo ID Craftopoly. ({username}).\n" \
-           "Fai il comando /help per interagire con i tickets".replace("{username}", username)
+    return "✅ Hai connesso con successo il tuo ID Craftopoly ({username}).\n" \
+           "Fai il comando /ticket per interagire con i tickets".replace("{username}", username)
 
 
 def ticket_successfully_created():
