@@ -1,26 +1,15 @@
+import os
+
+from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, ContextTypes, CommandHandler, MessageHandler, filters
 
 from commands.commands import startCommand, connectCommand, ticketCommand
 
-TOKEN = '6633082584:AAGlVNcJeNG3Pr40eWOTQFBqXa4k-bUnczI'
 
-"""
-def handleResponse(response):
-    response = response.lower()
-    if 'hello' in response:
-        return "Hey"
-    return "command not found"
+load_dotenv()
 
-
-async def handleRequest(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = update.message.from_user
-    text = update.message.text
-
-    response = handleResponse(text)
-
-    await update.message.reply_text(response)
-"""
+TOKEN = os.environ.get("TOKEN")
 
 
 async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -37,7 +26,8 @@ def main():
     # app.add_handler(MessageHandler(filters.TEXT, handleRequest))
     app.add_error_handler(error)
 
-    print("running")
+    print("[BOT] - status: running")
     app.run_polling(poll_interval=3)
+
 
 main()

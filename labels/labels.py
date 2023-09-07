@@ -2,14 +2,13 @@ from utils.utils import fixDate, fixTime
 
 
 def start_message(username):
-    return "Hey {username}!" \
+    return "Hey <b>{username}</b>!" \
         "\nBenvenuto nel bot ufficiale di Craftopoly.\n" \
-        "Qui puoi gestire i tuoi ticket senza per forza entrare on game" \
-        "\n\nConnetti il tuo Craftopoly ID:\n/connect - <codice>".replace("{username}", username)
+        "Qui puoi gestire i tuoi ticket senza necessariamente entrare in game".replace("{username}", username)
 
 
 def connect_message_success(username):
-    return "✅ Hai connesso con successo il tuo ID Craftopoly ({username}).\n" \
+    return "✅ Hai connesso con successo il tuo Craftopoly ID ({username}).\n" \
            "Fai il comando /ticket per interagire con i tickets".replace("{username}", username)
 
 
@@ -59,21 +58,34 @@ def no_enough_permissions():
 
 def ticket_info(ticket):
     status = "Aperto\n" if ticket['open'] else "Chiuso\n"
-    closed_on = "  ▪ Chiuso il: " + fixDate(ticket['closed_on'].split(" ")[0]) + " alle " + \
+    closed_on = "  • <b>Chiuso il</b>: " + fixDate(ticket['closed_on'].split(" ")[0]) + " alle " + \
                 fixTime(ticket['closed_on'].split(" ")[1]) if not ticket['open'] else ""
 
-    styledTicket = "▪ Ticket #"+str(ticket['ticket_id']) + \
-                   "\n\n" + "  ▪ Stato: " + status + "  ▪ Player: "+ticket['owner']['username'] + "\n" + \
-                   "  ▪ Aperto il: " + fixDate(ticket['created_on'].split(" ")[0]) + " alle " + \
+    styledTicket = "• <b>Ticket #"+str(ticket['ticket_id']) + "</b>" + \
+                   "\n\n" + "  • <b>Stato</b>: " + status + "  • <b>Player</b>: "+ticket['owner']['username'] + "\n" + \
+                   "  • <b>Aperto il</b>: " + fixDate(ticket['created_on'].split(" ")[0]) + " alle " + \
                    fixTime(ticket['created_on'].split(" ")[1]) + "\n" + closed_on + "\n\n "
 
-    messages = "    Messaggi:\n"
+    messages = "    <i>Messaggi</i>:\n"
     for message in ticket['messages']:
-        messages += "     " + message['owner']['username'] + " ➜ " + message['content'] + "\n"
+        messages += "     <b>|</b> " + message['owner']['username'] + " ➜ " + message['content'] + "\n"
 
     return styledTicket + messages
 
 
+def ticket_list_info(page, tickets):
+    res = "<b>Tickets</b>  (Pagina " + page + ")\n\n"
+    for tick in tickets:
+        status = "[Aperto]" if tick['open'] else "[Chiuso]"
+        res += status + "<b> #"+str(tick['ticket_id']) + \
+           " </b>" + tick['owner']['username'] + " ➜ " + (
+                   tick['message'] if len(tick['message']) < 34 else tick['message'][0:34]+"..."
+               ) + "\n"
+    return res
+
+
+def not_connected():
+    return "❌ Errore, prima di eseguire comandi devi connettere il tuo account telegram al tuo Craftopoly ID. Entra sul server minecraft e fai il comando <b>/connect-telegram</b>"
 
 
 def error():
@@ -81,9 +93,9 @@ def error():
 
 
 def help_message():
-    return "▪ Tickets\n\n" \
-           "  ▪ /ticket create <messaggio> - Crea un ticket\n" \
-           "  ▪ /ticket list <pagina> - Guarda i tuoi ticket\n" \
-           "  ▪ /ticket info <ticketId> <pagina> - Visualizza un ticket\n" \
-           "  ▪ /ticket comment <ticketId> <commento> - Commenta un ticket\n" \
-           "  ▪ /ticket close <ticketId> - Chiudi un ticket\n"
+    return "<b>Tickets</b> \n\n" \
+           "  • /ticket create &lt;messaggio&gt; ➜ Crea un ticket\n" \
+           "  • /ticket list &lt;pagina&gt; ➜ Guarda i tuoi ticket\n" \
+           "  • /ticket info &lt;ticketId&gt; &lt;pagina&gt; ➜ Visualizza un ticket\n" \
+           "  • /ticket comment &lt;tticketId&gt; &lt;commento&gt; ➜ Commenta un ticket\n" \
+           "  • /ticket close &lt;ticketId&gt; ➜ Chiudi un ticket\n"
